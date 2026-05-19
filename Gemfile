@@ -31,7 +31,6 @@ gem "solid_cache"
 gem "solid_queue"
 gem "solid_cable"
 
-gem "ruby_llm"
 gem "devise"
 
 # Use Redis adapter to run Action Cable in production
@@ -86,3 +85,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+# Custom Added
+gem "ruby_llm", "~> 1.2.0"

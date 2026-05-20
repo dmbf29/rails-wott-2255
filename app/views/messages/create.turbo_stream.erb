@@ -1,0 +1,8 @@
+<%# we are writing Turbo stream syntax to replace that JS we just wrote in the console %>
+<%# looking for an element with "messsages" as the ID %>
+<%= turbo_stream.append "messages" do %>
+  <%= render "messages/messages", messages: @chat.messages.order(created_at: :asc).last(2) %>
+<% end %>
+<%= turbo_stream.update "new_message" do %>
+  <%= render "messages/form", chat: @chat, message: Message.new %>
+<% end %>

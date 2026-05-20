@@ -1,4 +1,5 @@
-<%= simple_form_for [chat, message], html: { data: { controller: 'spin '}} do |f| %>
+<%# data-controller="load" %>
+<%= simple_form_for [chat, message], html: { data: { controller: 'load' } } do |f| %>
   <%= f.input :content, placeholder: "Ask a question", required: true, label: false %>
-  <%= f.button :submit, 'Ask LLM', class: 'btn btn-primary', data: { action: 'click->spin#start'} %>
+  <%= f.button :submit, 'Ask LLM', class: 'btn btn-primary', data: { action: 'click->load#start'} %>
 <% end %>

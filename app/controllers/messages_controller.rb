@@ -32,6 +32,7 @@ class MessagesController < ApplicationController
   def fetch_llm_response
     # get a response from the ruby_llm
     ruby_llm_chat = RubyLLM.chat
+    ruby_llm_chat.with_tool(CreateChallengeTool)
     # also need to give the chat the previous messsages
     @chat.messages.each do |message|
       ruby_llm_chat.add_message(message)

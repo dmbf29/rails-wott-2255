@@ -10,12 +10,13 @@ class MessagesController < ApplicationController
 
     # this message is what the user asked in the form
     if @message.save
-      response = fetch_llm_response
-      Message.create(
+      # call the background job thats doing the AI calls
+      assistant_message = Message.create(
         role: 'assistant',
-        content: response.content,
+        content: '<i class="fa-solid fa-ellipsis fa-beat-fade"></i>',
         chat: @chat
       )
+      AiMessageJob.perform_later(@message, assistant_message)
 
       # we dont want to re-render the WHOLE page, just the 2 new messages
       respond_to do |format|
@@ -29,23 +30,7 @@ class MessagesController < ApplicationController
 
   private
 
-  def fetch_llm_response
-    # get a response from the ruby_llm
-    ruby_llm_chat = RubyLLM.chat
-    ruby_llm_chat.with_tool(CreateChallengeTool)
-    # also need to give the chat the previous messsages
-    @chat.messages.each do |message|
-      ruby_llm_chat.add_message(message)
-    end
-    ruby_llm_chat.with_instructions("#{Message.system_prompt}\n#{challenge_context}")
-    return ruby_llm_chat.ask(@message.content)
-  end
-
   def message_params
     params.require(:message).permit(:content)
-  end
-
-  def challenge_context
-    " Here is the challenge I'm currently on: #{@challenge.content}"
   end
 end
